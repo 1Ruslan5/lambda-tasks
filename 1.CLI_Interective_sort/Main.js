@@ -57,6 +57,6 @@ function interective_sort(string, n){
         case "exit":
             return;
         default:
-            console.log("Please, select one of the 1-6 operations:");
+            console.log("Please, select one of the 1-6 operations");
     }
 };
