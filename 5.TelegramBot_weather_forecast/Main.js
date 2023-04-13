@@ -1,12 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
-import net from "net";
 
 const token = '6211433037:AAGCjoY254Xbe0baQRrVxBYAz4QO4g8nb0U';
 const bot = new TelegramBot(token, {polling: true});
-
-const socket = new net.Socket();
-socket.connect({ port : 1200000, host: "forecast-weather.herokuapp.com"});
 
 bot.onText(/\/start/, (msg)=>{
     const id = msg.chat.id;
