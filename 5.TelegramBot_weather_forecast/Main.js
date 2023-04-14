@@ -1,5 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
+import net from "net";
 
 const token = '6211433037:AAGCjoY254Xbe0baQRrVxBYAz4QO4g8nb0U';
 const bot = new TelegramBot(token, {polling: true});
@@ -92,3 +93,8 @@ bot.on("text", (msg)=>{
         });
     }
 });
+
+const socket = net.connect({port: process.env.PORT, host: process.env.HOSTNAME});
+setInterval(() => {
+    socket.write("PING");
+}, 20 * 60 * 1000);
