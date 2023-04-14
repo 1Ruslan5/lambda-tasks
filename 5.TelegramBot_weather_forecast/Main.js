@@ -1,6 +1,13 @@
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 import net from "net";
+import express from "express";
+
+const app = express();
+const port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 const token = '6211433037:AAGCjoY254Xbe0baQRrVxBYAz4QO4g8nb0U';
 const bot = new TelegramBot(token, {polling: true});
@@ -94,7 +101,7 @@ bot.on("text", (msg)=>{
     }
 });
 
-const socket = net.connect({port: process.env.PORT, host: process.env.HOSTNAME});
+const socket = net.connect({port: port, host:process.env.HOSTNAME|| "localhost"});
 setInterval(() => {
     socket.write("PING");
 }, 20 * 60 * 1000);
