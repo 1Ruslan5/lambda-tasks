@@ -59,7 +59,7 @@ function search(){
     .prompt([
         {
             name: "question",
-            message: "Are you want search user in DB?",
+            message: "Do you want search user in DB?",
             type:"confirm"
         }
     ])
