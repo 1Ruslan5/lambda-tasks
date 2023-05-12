@@ -1,0 +1,152 @@
+[
+  {
+    "userId": "619394943a8533001285e7fb",
+    "name": "Anastasiia Koval",
+    "weekenDates": [
+      {
+        "startDate": "2021-11-22",
+        "endDate": "2021-11-22"
+      }
+    ]
+  },
+  {
+    "userId": "619434303a8533001285f100",
+    "name": "Dan Kochetov",
+    "weekenDates": [
+      {
+        "startDate": "2021-11-22",
+        "endDate": "2021-11-22"
+      },
+      {
+        "startDate": "2021-10-20",
+        "endDate": "2021-10-22"
+      },
+      {
+        "startDate": "2021-12-01",
+        "endDate": "2021-12-01"
+      }
+    ]
+  },
+  {
+    "userId": "6177b1884c4250001275d6f8",
+    "name": "Dmitry Marchenko",
+    "weekenDates": [
+      {
+        "startDate": "2021-11-15",
+        "endDate": "2021-11-19"
+      }
+    ]
+  },
+  {
+    "userId": "61b11cfc3a8533001286e862",
+    "name": "Dzianis Stayehlazau",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-10",
+        "endDate": "2021-12-10"
+      }
+    ]
+  },
+  {
+    "userId": "6196a33a3a853300128602eb",
+    "name": "Ivan Pugach",
+    "weekenDates": [
+      {
+        "startDate": "2021-11-19",
+        "endDate": "2021-11-23"
+      },
+      {
+        "startDate": "2021-12-10",
+        "endDate": "2021-12-12"
+      }
+    ]
+  },
+  {
+    "userId": "61b3700b3a85330012873568",
+    "name": "Kyrylo Usichenko",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-14",
+        "endDate": "2021-12-14"
+      }
+    ]
+  },
+  {
+    "userId": "619602f13a8533001285fb95",
+    "name": "Maksym Simonov",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-01",
+        "endDate": "2021-12-05"
+      }
+    ]
+  },
+  {
+    "userId": "618d2e6eac15350011f833eb",
+    "name": "Oleksii Martynenko",
+    "weekenDates": [
+      {
+        "startDate": "2021-11-29",
+        "endDate": "2021-12-10"
+      }
+    ]
+  },
+  {
+    "userId": "61b36ff43a853300128734fb",
+    "name": "Roman Nahryshko",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-14",
+        "endDate": "2021-12-14"
+      },
+      {
+        "startDate": "2021-12-14",
+        "endDate": "2021-12-14"
+      }
+    ]
+  },
+  {
+    "userId": "61a63af23a853300128672fa",
+    "name": "Ruslan Kaniuk",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-01",
+        "endDate": "2021-12-01"
+      }
+    ]
+  },
+  {
+    "userId": "61b653863a853300128767a0",
+    "name": "Snezhana Riazantseva",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-13",
+        "endDate": "2021-12-13"
+      },
+      {
+        "startDate": "2021-11-04",
+        "endDate": "2021-11-05"
+      }
+    ]
+  },
+  {
+    "userId": "61a3c3bb3a85330012864b5b",
+    "name": "Vladimir Kuzin",
+    "weekenDates": [
+      {
+        "startDate": "2021-12-09",
+        "endDate": "2021-12-10"
+      }
+    ]
+  },
+  {
+    "userId": "617660a44c4250001275c807",
+    "name": "Yevhenii Ishchenko",
+    "weekenDates": [
+      {
+        "startDate": "2021-11-02",
+        "endDate": "2021-11-02"
+      }
+    ]
+  }
+]
