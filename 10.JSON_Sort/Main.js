@@ -42,7 +42,6 @@ async function jsonGet(link, attempt = 1) {
 }
 
 function countTF(tf) {
-
   if (tf) {
     countTrue++;
   } else {

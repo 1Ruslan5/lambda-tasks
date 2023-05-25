@@ -8,11 +8,12 @@ let array;
 
 async function server(){
       app.listen(3000, () => {
-        console.log('Server started on port 3000');
+        console.log('Server started');
       });
       const url = await ngrok.connect({
         addr: 3000,
-      });
+        authtoken: '2QI7yrnQqWhlFa7EoWUlEeJsG4S_6JmgDT2GD4qRkMn1xsdg5',
+       });
       console.log('ngrok URL:', url);
 };
 
