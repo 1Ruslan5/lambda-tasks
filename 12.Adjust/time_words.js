@@ -1,7 +1,7 @@
 function words(amount, language,typeOfFIle){
     let sumMony;
     let typeFile = ['doc', 'docx', 'rtf'];
-        if(language === 'en'){
+    if(language === 'en'){
         sumMony = (amount <= 1000)? 120: amount * 0.12;
     }else if (language === 'ua' || language === 'ru'){
         sumMony = (amount <= 1000)? 50: amount * 0.05;
@@ -21,15 +21,10 @@ function time(amount, language, typeOfFIle, date = new Date()){
     let uk_ru = 1333;
     let typeFile = ['doc', 'docx', 'rtf'];
     if(language === 'en'){
-        if(eng > amount){
-            return "Not enough symbols";
-        }
-        sumTime = 30 + (Math.ceil(amount/eng)*60);
+        sumTime = 30 + (Math.ceil(amount/eng)*60);  
     }else if (language === 'ua' || language === 'ru'){
-        if(uk_ru > amount){
-            return "Not enough symbols";
-        }
-        sumTime = 30 + (Math.ceil(amount/1333)*60);
+        sumTime = 30 + (Math.ceil(amount/uk_ru)*60);
+        console.log(sumTime)
     }else{
         return "Not valid language"
     }
