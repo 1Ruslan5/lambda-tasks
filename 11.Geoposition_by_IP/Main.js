@@ -1,33 +1,37 @@
-import express from 'express';
-import ngrok from 'ngrok';
-import fs from 'fs';
+const express = require('express');
+const { connect } = require('ngrok');
+const { readFileSync } = require('fs');
+require('dotenv').config();
 
-let app = express();
+let { PORT, NGROK_TOKEN } = process.env
 let arrayIP = [];
 let array;
+let app = express();
 
-async function server(){
-      app.listen(3000, () => {
-        console.log('Server started');
-      });
-      const url = await ngrok.connect({
-        addr: 3000,
-        authtoken: '2QI7yrnQqWhlFa7EoWUlEeJsG4S_6JmgDT2GD4qRkMn1xsdg5',
-       });
-      console.log('ngrok URL:', url);
-};
-
-function readCSV(){
-  array = fs.readFileSync('C:/lambda-task/11.Geoposition_by_IP/IP2LOCATION-LITE-DB1.CSV', 'utf8')
-  .trim()
-  .split("\r\n")
-  for(let i of array){
-    let line = i.split(',')
-    arrayIP.push(line[0].replace(/"/g, ''));
+const server = async () => {
+  try {
+    app.listen(PORT, () => {
+      console.log('Server started');
+    });
+    const url = await connect({
+      addr: PORT,
+      authtoken: NGROK_TOKEN,
+    });
+    console.log('ngrok URL:', url);
+  } catch (err) {
+    console.log(err);
   }
 }
 
-function formatJSON(string){
+const readCSV = () => {
+  array = readFileSync('C:/lambda-task/11.Geoposition_by_IP/IP2LOCATION-LITE-DB1.CSV', 'utf8').trim().split("\r\n")
+  array.reduce((trim, current) => {
+    let [line] = current.split(',');
+    arrayIP.push(line.replace(/"/g, ''));
+  }, 0)
+}
+
+const formatJSON = (string) => {
   let line = string.split(',')
   let json = {
     firstIP: Number(line[0].replace(/"/g, '')),
@@ -38,17 +42,17 @@ function formatJSON(string){
   return json
 }
 
-function ipToNumber(ip){
+const ipToNumber = (ip) => {
   const parts = ip.split(".");
-  return parts.reduce((result, part) => ((result << 8) + parseInt(part, 10))>>> 0, 0);
+  return parts.reduce((result, part) => ((result << 8) + parseInt(part, 10)) >>> 0, 0);
 }
 
-function searchIP(array, item) {
+const searchIP = (array, item) => {
   let left = 0;
   let right = array.length - 1;
 
-  if(item >= array[array.length-1]){
-    return array.length-1
+  if (item >= array[array.length - 1]) {
+    return array.length - 1
   }
   while (left <= right) {
     const mid = Math.floor((left + right) / 2);
@@ -66,17 +70,19 @@ function searchIP(array, item) {
   }
 }
 
+app.set('trust proxy', true);
+
+app.get('/', (req, res) => {
+  let ip = ipToNumber(req.ip);
+  const index = searchIP(arrayIP, ip);
+  const json = formatJSON(array[index])
+  console.log(json);
+  res.send(
+    `User IP: ${ip} <br>` +
+    `Country code: ${json.code} <br>` +
+    `Country: ${json.country}`
+  )
+});
+
 server();
 readCSV();
-app.set('trust proxy', true);
-app.get('/', (req, res) => {
-    let ip = ipToNumber(req.ip);
-    const index = searchIP(arrayIP, ip);
-    const json = formatJSON(array[index])
-    console.log(json);
-    res.send(
-      `User IP: ${ip} <br>`+
-      `Country code: ${json.code} <br>`+
-      `Country: ${json.country}`
-    )
-});

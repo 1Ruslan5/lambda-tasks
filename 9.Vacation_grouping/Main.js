@@ -1,17 +1,17 @@
-import fs from "fs"
+import {readFileSync, writeFileSync} from "fs"
 
-let jsonArray = JSON.parse(fs.readFileSync('/lambda-task/9.Vacation_grouping/json_vacation.txt', "utf8"));
-sortPackage(jsonArray);
+let jsonArray = JSON.parse(readFileSync('/lambda-task/9.Vacation_grouping/json_vacation.txt', "utf8"));
 
-function sortPackage(jsonArray){
+const sortPackage = (jsonArray)=>{
   let newJSONArr = [];
+  
   for(let i = 0; i < jsonArray.length; i++){
     jsonArray[i] = convertJSON(jsonArray[i]);
   }
   jsonArray = quickSort(jsonArray)
   if(jsonArray.length < 2){
     console.log(jsonArray)
-    fs.writeFileSync("/lambda-task/9.Vacation_grouping/new_json_vacation.txt", JSON.stringify(jsonArray, null, 2));
+    writeFileSync("/lambda-task/9.Vacation_grouping/new_json_vacation.txt", JSON.stringify(jsonArray, null, 2));
   }else{
     let value = 0;
     newJSONArr.push(jsonArray[0]);
@@ -25,11 +25,11 @@ function sortPackage(jsonArray){
         }
     }
     console.log(newJSONArr);
-    fs.writeFileSync("/lambda-task/9.Vacation_grouping/new_json_vacation.txt", JSON.stringify(newJSONArr, null, 2));
+    writeFileSync("/lambda-task/9.Vacation_grouping/new_json_vacation.txt", JSON.stringify(newJSONArr, null, 2));
   }
 }
 
-function convertJSON(json){
+const convertJSON = (json)=>{
     return {
         userId: json._id,
         name: json.user.name,
@@ -37,7 +37,7 @@ function convertJSON(json){
     }
 }
 
-function quickSort(arr) {
+const  quickSort = (arr) => {
   if (arr.length <= 1) {
     return arr;
   }
@@ -60,3 +60,5 @@ function quickSort(arr) {
 
   return [...quickSort(left), pivot, ...quickSort(right)];
 }
+
+sortPackage(jsonArray);

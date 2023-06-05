@@ -1,23 +1,28 @@
 const express = require('express');
-const time_words = require('./time_words');
+const { money, time } = require('./time_words');
+require('dotenv').config();
 
 let app = express();
-let port = 3000;
+let { PORT } = process.env;
 
 app.use(express.json());
 
-app.post('/data', async (req, res) =>{
-    const data = req.body;
-    let timeJSON = time_words.time(data.count, data.language, data.mimetype);
+app.post('/data', async (req, res) => {
+    const { body: { count, language, mimetype } } = req;
+    let timeJSON = time(count, language, mimetype);
     let json = {
-        "price": time_words.words(data.count, data.language, data.mimetype),
+        "price": money(count, language, mimetype),
         "time": timeJSON.time,
         "deadline": timeJSON.deadline,
-        "deadline_date": timeJSON.deadline_data        
+        "deadline_date": timeJSON.deadline_data
     }
     res.json(json);
 })
 
-app.listen(port, ()=>{
-    console.log(`Server started on port ${port}`)
+app.listen(PORT, () => {
+    try {
+        console.log(`Server started on port ${PORT}`)
+    } catch (err) {
+        console.log(err);
+    }
 })

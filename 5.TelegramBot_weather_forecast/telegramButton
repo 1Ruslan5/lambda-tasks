@@ -1,0 +1,17 @@
+const forecast = "Weather forecast in Kharkiv";
+const exchange = "Exchange rate";
+const six = "with interval at 6 oclock";
+const three = "with interval at 3 oclock";
+const back = "Go to back";
+const usd = "USD";
+const eur = "EUR";
+
+module.exports = {
+    forecast,
+    exchange,
+    six,
+    three, 
+    back,
+    usd,
+    eur
+}

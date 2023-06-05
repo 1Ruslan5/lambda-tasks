@@ -1,0 +1,9 @@
+const privatApi = "https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11";
+const forecastApi = "https://api.openweathermap.org/data/2.5/forecast?lat=49.986387&lon=36.227873&appid=7f356605ab931defa1f5389e58e74d2c&units=metric&lang=en";
+const monoApi = "https://api.monobank.ua/bank/currency"
+
+module.exports = {
+    privatApi, 
+    forecastApi, 
+    monoApi
+}

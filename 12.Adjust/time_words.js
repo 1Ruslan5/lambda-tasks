@@ -1,4 +1,4 @@
-function words(amount, language,typeOfFIle){
+const money = (amount, language,typeOfFIle) => {
     let sumMony;
     let typeFile = ['doc', 'docx', 'rtf'];
     if(language === 'en'){
@@ -14,9 +14,8 @@ function words(amount, language,typeOfFIle){
     return sumMony
 }
 
-function time(amount, language, typeOfFIle, date = new Date()){
-    let sumTime;
-    let days, hours, minutes;
+const time = (amount, language, typeOfFIle, date = new Date()) => {
+    let sumTime, days, hours, minutes;
     let eng = 333;
     let uk_ru = 1333;
     let typeFile = ['doc', 'docx', 'rtf'];
@@ -40,7 +39,6 @@ function time(amount, language, typeOfFIle, date = new Date()){
         hours += 10;
     }else{
         hours += date.getHours((date.getHours() < 10 || date.getHours() >= 19)? 10:date.getHours());
-        
     }
     if(10 >= hours){
         hours += 10-date.getHours();
@@ -72,7 +70,8 @@ function time(amount, language, typeOfFIle, date = new Date()){
         'deadline_data': date.toLocaleString()
     }
 }
+
 module.exports = {
     time,
-    words,
+    money,
 };

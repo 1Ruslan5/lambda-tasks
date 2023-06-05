@@ -1,30 +1,14 @@
-import fs  from "fs";
+import {readFileSync}  from "fs";
 
 console.time('myFunction1');
 let array = [];
 let map = new Map();
 
-for(let i = 0; i < 20; i++){
-    array = mergeSort(fs.readFileSync(`/lambda-task/8.Instagram_Giveaway/words/out${i}.txt`, "utf8").toString().split('\n'));
-    for(let value of array){
-        if(map.has(value)){
-            let count = map.get(value)
-            map.set(value, count+1);
-        }else{
-            map.set(value, 0);
-        }    
-    }    
-}
-
-uniqueValues(map);
-existInAllFiles(map);
-existInAllLeastTen(map);
-
-function uniqueValues(map){
+const uniqueValues=(map)=>{
     console.log(map.size);
 }
 
-function existInAllFiles(map){
+const existInAllFiles=(map)=>{
     let count = 0;
     for(let value of map.values()){
         if(value === 19){
@@ -34,7 +18,7 @@ function existInAllFiles(map){
     console.log(count);
 }
 
-function existInAllLeastTen(map){
+const existInAllLeastTen=(map)=>{
     let count = 0;
     for(let value of map.values()){
         if(value >= 9){
@@ -44,7 +28,7 @@ function existInAllLeastTen(map){
     console.log(count);
 }
   
-function mergeSort(a){
+const mergeSort=(a)=>{
     if (a.length < 2) return a
     const middle = Math.floor(a.length / 2)
     const sorted_l = mergeSort(a.slice(0, middle))
@@ -52,7 +36,7 @@ function mergeSort(a){
     return mergeSortedArrays(sorted_l, sorted_r)
 }
 
-function mergeSortedArrays(a, b) {
+const mergeSortedArrays=(a, b)=> {
     const result = [];
     let i = 0;
     let j = 0;
@@ -79,4 +63,20 @@ function mergeSortedArrays(a, b) {
     }
     return result;
 }
+
+for(let i = 0; i < 20; i++){
+    array = mergeSort(readFileSync(`/lambda-task/8.Instagram_Giveaway/words/out${i}.txt`, "utf8").split('\n'));
+    for(let value of array){
+        if(map.has(value)){
+            let count = map.get(value)
+            map.set(value, count+1);
+        }else{
+            map.set(value, 0);
+        }    
+    }    
+}
+
+uniqueValues(map);
+existInAllFiles(map);
+existInAllLeastTen(map);
 console.timeEnd('myFunction1');
