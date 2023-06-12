@@ -2,11 +2,13 @@ const { MongoClient } = require('mongodb');
 const { dbName, collectionUser, collectionTokens } = require('./dbName');
 require('dotenv').config();
 
+const { URI } = process.env;
+
 class Repository {
 
   client;
 
-  constructor(URI) {
+  constructor() {
     this.client = new MongoClient(URI);
   }
 

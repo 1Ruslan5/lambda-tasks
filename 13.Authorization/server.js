@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const randtoken = require('rand-token');
-const { Repository } = require('./repository');
+const { Repository } = require('./Repository');
 require("dotenv").config()
 
 const { URI, PORT, SECRET_KEY } = process.env;
