@@ -37,7 +37,7 @@ router.get('/*', async (req: Request, res: Response) => {
     if (!key) {
         return res.status(404).json(jsonAwnswear(400, "Route didn't found"));
     }
-    const {body} = await repository.getJSON({key});
+    const { body } = await repository.getJSON({ key });
     return res.status(200).json(body)
 });
 

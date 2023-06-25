@@ -4,7 +4,7 @@ import { Repository } from "./controllers/repository";
 import "dotenv/config"
 
 const app: express.Application = express();
-const PORT: string | undefined = process.env.PORT;
+const PORT: string = process.env.PORT!;
 const repository = new Repository();
 
 app.use(router)
@@ -13,4 +13,3 @@ repository.connect();
 app.listen(PORT, () => {
     console.log("Typescript express started");
 })
-

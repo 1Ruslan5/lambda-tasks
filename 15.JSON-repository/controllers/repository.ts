@@ -32,7 +32,7 @@ class Repository {
 
     }
 
-    getJSON = async (route: any):Promise<any> => {
+    getJSON = async (route: any): Promise<any> => {
         try {
             return this.collection.findOne(route);
         } catch (err) {

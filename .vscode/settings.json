@@ -1,0 +1,30 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "lambda_task",
+            "database": "crypto",
+            "password": "password",
+            "username": "sqluser"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "eu-cdbr-west-03.cleardb.net",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "remote-crypto-api",
+            "username": "b8fd0bd7f626de",
+            "password": "9f55b014",
+            "database": "heroku_7b3b6acbac4b56e"
+        }
+    ]
+}
