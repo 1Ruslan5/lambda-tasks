@@ -1,5 +1,6 @@
+import 'express';
 import express, { Router, Request, Response } from 'express';
-import { Repository } from "../controllers/Repository";
+import { Repository } from '../controllers/Repository';
 
 const router: Router = Router();
 const repository: Repository = new Repository();
