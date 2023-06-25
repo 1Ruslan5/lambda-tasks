@@ -117,15 +117,26 @@ class Repository {
                 }
             }));
         };
-        this.checkCoinExistName = (coinSymbol, table) => {
+        this.checkCoinExistName = (coinName, table) => {
             return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     const connection = yield this.getConnection();
-                    connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE name = '${coinSymbol.toUpperCase()}'`, (error, results) => {
-                        const count = results[0].count;
-                        const coinExists = count > 0;
-                        resolve(coinExists);
-                    });
+                    if (table.toLowerCase() === 'kucoin') {
+                        connection.query(`SELECT symbol FROM coinstats WHERE name = '${coinName.toUpperCase()}';`, (error, result) => {
+                            connection.query(`SELECT COUNT(*) AS count FROM kucoin WHERE symbol = '${result[0].symbol}'`, (error, results) => {
+                                const count = results[0].count;
+                                const coinExists = count > 0;
+                                resolve(coinExists);
+                            });
+                        });
+                    }
+                    else {
+                        connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE name = '${coinName.toUpperCase()}'`, (error, results) => {
+                            const count = results[0].count;
+                            const coinExists = count > 0;
+                            resolve(coinExists);
+                        });
+                    }
                 }
                 catch (err) {
                     console.log(err);

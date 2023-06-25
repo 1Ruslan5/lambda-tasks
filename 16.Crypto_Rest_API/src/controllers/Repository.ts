@@ -25,14 +25,14 @@ class Repository {
     }
 
     insert = async (json: Object, table: string) => {
-        let connection: PoolConnection|null = null;
+        let connection: PoolConnection | null = null;
         try {
             connection = await this.getConnection();
             connection.query(`INSERT INTO ${table} SET ?`, json)
         } catch (err) {
             console.error('Error with insert:', err);
-        }finally{
-            if(connection){
+        } finally {
+            if (connection) {
                 connection.release();
             }
         }
@@ -52,7 +52,7 @@ class Repository {
         return new Promise(async (resolve) => {
             try {
                 const connection = await this.getConnection();
-                connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND name = '${cryptoName.toUpperCase()}';`, (error, result:RowDataPacket[]) => {
+                connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND name = '${cryptoName.toUpperCase()}';`, (error, result: RowDataPacket[]) => {
                     resolve(result);
                     connection.release();
                 });
@@ -66,7 +66,7 @@ class Repository {
         return new Promise(async (resolve) => {
             try {
                 const connection = await this.getConnection();
-                connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${cryptoSymbol.toUpperCase()}';`, (error, result:RowDataPacket[]) => {
+                connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${cryptoSymbol.toUpperCase()}';`, (error, result: RowDataPacket[]) => {
                     resolve(result);
                     connection.release();
                 });
@@ -80,8 +80,8 @@ class Repository {
         return new Promise(async (resolve) => {
             try {
                 const connection = await this.getConnection();
-                connection.query(`SELECT symbol FROM coinstats WHERE name = '${cryptoName.toUpperCase()}';`, (error, result) => {
-                    connection.query(`SELECT * FROM kucoin WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${result[0].symbol}';`, (error, result:RowDataPacket[]) => {
+                connection.query(`SELECT symbol FROM coinstats WHERE name = '${cryptoName.toUpperCase()}';`, (error, result: RowDataPacket[]) => {
+                    connection.query(`SELECT * FROM kucoin WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${result[0].symbol}';`, (error, result: RowDataPacket[]) => {
                         resolve(result);
                     });
                 })
@@ -96,7 +96,7 @@ class Repository {
             try {
                 const connection = await this.getConnection();
                 connection.query(
-                    `SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE symbol = '${coinSymbol.toUpperCase()}'`, (error, results) => {
+                    `SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE symbol = '${coinSymbol.toUpperCase()}'`, (error, results: RowDataPacket[]) => {
                         const count = results[0].count;
                         const coinExists = count > 0;
                         resolve(coinExists);
@@ -107,17 +107,29 @@ class Repository {
         });
     };
 
-    checkCoinExistName = (coinSymbol: string, table: string) => {
+    checkCoinExistName = (coinName: string, table: string) => {
         return new Promise(async (resolve) => {
             try {
                 const connection = await this.getConnection();
-                connection.query(
-                    `SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE name = '${coinSymbol.toUpperCase()}'`, (error, results) => {
-                        const count = results[0].count;
-                        const coinExists = count > 0;
-                        resolve(coinExists);
-                    }
-                );
+                if (table.toLowerCase() === 'kucoin') {
+                    connection.query(`SELECT symbol FROM coinstats WHERE name = '${coinName.toUpperCase()}';`, (error, result: RowDataPacket[]) => {
+                        connection.query(
+                            `SELECT COUNT(*) AS count FROM kucoin WHERE symbol = '${result[0].symbol}'`, (error, results: RowDataPacket[]) => {
+                                const count = results[0].count;
+                                const coinExists = count > 0;
+                                resolve(coinExists);
+                            }
+                        );    
+                    });
+                } else {
+                    connection.query(
+                        `SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE name = '${coinName.toUpperCase()}'`, (error, results: RowDataPacket[]) => {
+                            const count = results[0].count;
+                            const coinExists = count > 0;
+                            resolve(coinExists);
+                        }
+                    );
+                }
             } catch (err) {
                 console.log(err);
             }
