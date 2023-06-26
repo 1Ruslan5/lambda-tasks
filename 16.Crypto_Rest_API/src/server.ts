@@ -1,6 +1,6 @@
 import 'express';
 import { router } from './models/requests';
-import { dataFromDB } from "./controllers/api";
+import { dataFromDB } from './controllers/autoinsert';
 import { schedule } from "node-cron";
 import * as dotenv from 'dotenv';
 import { connect } from "ngrok";

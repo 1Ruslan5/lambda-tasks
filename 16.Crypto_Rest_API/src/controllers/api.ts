@@ -1,7 +1,4 @@
 import axios from "axios";
-import { Repository } from "./Repository"
-
-const repository = new Repository()
 
 interface Crypto {
     name: any;
@@ -63,10 +60,7 @@ const marketCap = async () => {
             }
         })
 
-        repository.delet('4 HOUR', 'marketcap')
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'marketcap')
-        }
+        return cryptocurrencies
     } catch (err) {
         console.error('Error with api marketcap:', err);
     }
@@ -96,10 +90,7 @@ const koinbase = async () => {
             }
         });
 
-        repository.delet('4 HOUR', 'koinbase');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'koinbase')
-        }
+        return cryptocurrencies
     } catch (err) {
         console.error('Error with api koinbase', err);
     }
@@ -122,10 +113,7 @@ const coinStats = async () => {
             }
         })
 
-        repository.delet('4 HOUR', 'coinstats')
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'coinstats')
-        }
+        return cryptocurrencies
     } catch (err) {
         console.error('Error with api coinstats:', err);
     }
@@ -148,10 +136,7 @@ const kucoin = async () => {
             }
         })
 
-        repository.delet('4 HOUR', 'kucoin')
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'kucoin')
-        }
+        return cryptocurrencies
     } catch (err) {
         console.error('Error with api kucoin:', err);
     }
@@ -174,22 +159,11 @@ const coinPaprika = async () => {
                 dayPrice: numberFormat(dayPrice)
             }
         });
-        repository.delet('4 HOUR', 'coinpaprika');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'coinpaprika')
-        }
+
+        return cryptocurrencies
     } catch (err) {
         console.error('Error with api coinpaprika:', err);
     }
 }
 
-const dataFromDB = () => {
-    marketCap();
-    koinbase();
-    coinStats();
-    kucoin();
-    coinPaprika();
-    console.log('All data was sended to db');
-}
-
-export { dataFromDB }
+export { marketCap, koinbase, coinStats, kucoin, coinPaprika }

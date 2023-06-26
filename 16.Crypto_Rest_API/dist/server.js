@@ -22,22 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("express");
 const requests_1 = require("./models/requests");
-const api_1 = require("./controllers/api");
+const autoinsert_1 = require("./controllers/autoinsert");
 const node_cron_1 = require("node-cron");
 const dotenv = __importStar(require("dotenv"));
 const ngrok_1 = require("ngrok");
@@ -47,12 +38,12 @@ const app = (0, express_1.default)();
 const { PORT, NGROK_TOKEN, HOSTNAME } = process.env;
 const port = PORT || 3000;
 const hostname = HOSTNAME || 'localhost';
-const server = () => __awaiter(void 0, void 0, void 0, function* () {
+const server = async () => {
     try {
         app.listen(port, () => {
             console.log(`Server is running on http://${hostname}:${port}`);
         });
-        const url = yield (0, ngrok_1.connect)({
+        const url = await (0, ngrok_1.connect)({
             addr: port,
             authtoken: NGROK_TOKEN,
         });
@@ -60,10 +51,10 @@ const server = () => __awaiter(void 0, void 0, void 0, function* () {
     catch (err) {
         console.log(err);
     }
-});
+};
 app.use(requests_1.router);
 server();
-(0, node_cron_1.schedule)('*/5 * * * *', () => __awaiter(void 0, void 0, void 0, function* () {
-    (0, api_1.dataFromDB)();
-}));
+(0, node_cron_1.schedule)('*/5 * * * *', async () => {
+    (0, autoinsert_1.dataFromDB)();
+});
 //# sourceMappingURL=server.js.map

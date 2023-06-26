@@ -1,21 +1,10 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dataFromDB = void 0;
+exports.coinPaprika = exports.kucoin = exports.coinStats = exports.koinbase = exports.marketCap = void 0;
 const axios_1 = __importDefault(require("axios"));
-const Repository_1 = require("./Repository");
-const repository = new Repository_1.Repository();
 const calculatePercentage = (suma, percentage) => {
     let answear = (suma) + (suma * percentage / 100);
     if (answear <= 0) {
@@ -35,9 +24,9 @@ const deleteUSD = (ticker) => {
         .sort((a, b) => b.volValue - a.volValue)
         .slice(0, 100);
 };
-const marketCap = () => __awaiter(void 0, void 0, void 0, function* () {
+const marketCap = async () => {
     try {
-        const { data: { data } } = yield axios_1.default.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
+        const { data: { data } } = await axios_1.default.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
             headers: {
                 'X-CMC_PRO_API_KEY': "9f2092dc-f56a-4027-9712-1930eb76cb65"
             },
@@ -55,18 +44,16 @@ const marketCap = () => __awaiter(void 0, void 0, void 0, function* () {
                 dayPrice: numberFormat(priceDay)
             };
         });
-        repository.delet('4 HOUR', 'marketcap');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'marketcap');
-        }
+        return cryptocurrencies;
     }
     catch (err) {
         console.error('Error with api marketcap:', err);
     }
-});
-const koinbase = () => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.marketCap = marketCap;
+const koinbase = async () => {
     try {
-        const { data } = yield axios_1.default.get('https://api.coingecko.com/api/v3/coins/markets', {
+        const { data } = await axios_1.default.get('https://api.coingecko.com/api/v3/coins/markets', {
             params: {
                 vs_currency: 'usd',
                 order: 'market_cap_desc',
@@ -84,18 +71,16 @@ const koinbase = () => __awaiter(void 0, void 0, void 0, function* () {
                 dayPrice: numberFormat(priceChange1d)
             };
         });
-        repository.delet('4 HOUR', 'koinbase');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'koinbase');
-        }
+        return cryptocurrencies;
     }
     catch (err) {
         console.error('Error with api koinbase', err);
     }
-});
-const coinStats = () => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.koinbase = koinbase;
+const coinStats = async () => {
     try {
-        const { data: { coins } } = yield axios_1.default.get('https://api.coinstats.app/public/v1/coins?skip=0&limit=60&currency=USD');
+        const { data: { coins } } = await axios_1.default.get('https://api.coinstats.app/public/v1/coins?skip=0&limit=60&currency=USD');
         const cryptocurrencies = coins.map(({ name, symbol, price, priceChange1h, priceChange1d }) => {
             const current_price = parseFloat(price);
             const dayPrice = calculatePercentage(current_price, parseFloat(priceChange1d));
@@ -106,18 +91,16 @@ const coinStats = () => __awaiter(void 0, void 0, void 0, function* () {
                 dayPrice: numberFormat(dayPrice)
             };
         });
-        repository.delet('4 HOUR', 'coinstats');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'coinstats');
-        }
+        return cryptocurrencies;
     }
     catch (err) {
         console.error('Error with api coinstats:', err);
     }
-});
-const kucoin = () => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.coinStats = coinStats;
+const kucoin = async () => {
     try {
-        const { data: { data: { ticker } } } = yield axios_1.default.get('https://api.kucoin.com/api/v1/market/allTickers');
+        const { data: { data: { ticker } } } = await axios_1.default.get('https://api.kucoin.com/api/v1/market/allTickers');
         const cryptocurrencies = deleteUSD(ticker).map(({ symbol, buy, changePrice }) => {
             const price = parseFloat(buy);
             const dayPrice = price + parseFloat(changePrice);
@@ -127,18 +110,16 @@ const kucoin = () => __awaiter(void 0, void 0, void 0, function* () {
                 dayPrice: numberFormat(dayPrice)
             };
         });
-        repository.delet('4 HOUR', 'kucoin');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'kucoin');
-        }
+        return cryptocurrencies;
     }
     catch (err) {
         console.error('Error with api kucoin:', err);
     }
-});
-const coinPaprika = () => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.kucoin = kucoin;
+const coinPaprika = async () => {
     try {
-        const { data } = yield axios_1.default.get('https://api.coinpaprika.com/v1/ticker');
+        const { data } = await axios_1.default.get('https://api.coinpaprika.com/v1/ticker');
         let cryptocurrencies = data.slice(0, 60).map(({ name, symbol, price_usd, percent_change_1h, percent_change_24h }) => {
             const currentPrice = parseFloat(price_usd);
             const dayPrice = calculatePercentage(currentPrice, parseFloat(percent_change_24h));
@@ -149,22 +130,11 @@ const coinPaprika = () => __awaiter(void 0, void 0, void 0, function* () {
                 dayPrice: numberFormat(dayPrice)
             };
         });
-        repository.delet('4 HOUR', 'coinpaprika');
-        for (let json of cryptocurrencies) {
-            repository.insert(json, 'coinpaprika');
-        }
+        return cryptocurrencies;
     }
     catch (err) {
         console.error('Error with api coinpaprika:', err);
     }
-});
-const dataFromDB = () => {
-    marketCap();
-    koinbase();
-    coinStats();
-    kucoin();
-    coinPaprika();
-    console.log('All data was sended to db');
 };
-exports.dataFromDB = dataFromDB;
+exports.coinPaprika = coinPaprika;
 //# sourceMappingURL=api.js.map

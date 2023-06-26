@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Repository = void 0;
 const mysql2_1 = require("mysql2");
@@ -34,10 +25,10 @@ class Repository {
                 });
             });
         };
-        this.insert = (json, table) => __awaiter(this, void 0, void 0, function* () {
+        this.insert = async (json, table) => {
             let connection = null;
             try {
-                connection = yield this.getConnection();
+                connection = await this.getConnection();
                 connection.query(`INSERT INTO ${table} SET ?`, json);
             }
             catch (err) {
@@ -48,21 +39,21 @@ class Repository {
                     connection.release();
                 }
             }
-        });
-        this.delet = (time, table) => __awaiter(this, void 0, void 0, function* () {
+        };
+        this.delet = async (time, table) => {
             try {
-                const connection = yield this.getConnection();
+                const connection = await this.getConnection();
                 connection.query(`DELETE FROM ${table} WHERE dateInput < (NOW() - INTERVAL ${time});`);
                 connection.release();
             }
             catch (err) {
                 console.error('Error with delete:', err);
             }
-        });
+        };
         this.selectTakeByName = (cryptoName, table, time) => {
-            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+            return new Promise(async (resolve) => {
                 try {
-                    const connection = yield this.getConnection();
+                    const connection = await this.getConnection();
                     connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND name = '${cryptoName.toUpperCase()}';`, (error, result) => {
                         resolve(result);
                         connection.release();
@@ -71,12 +62,12 @@ class Repository {
                 catch (err) {
                     console.log(err);
                 }
-            }));
+            });
         };
         this.selectTakeBySymbol = (cryptoSymbol, table, time) => {
-            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+            return new Promise(async (resolve) => {
                 try {
-                    const connection = yield this.getConnection();
+                    const connection = await this.getConnection();
                     connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${cryptoSymbol.toUpperCase()}';`, (error, result) => {
                         resolve(result);
                         connection.release();
@@ -85,12 +76,12 @@ class Repository {
                 catch (err) {
                     console.log(err);
                 }
-            }));
+            });
         };
         this.selectKucoinByName = (cryptoName, time) => {
-            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+            return new Promise(async (resolve) => {
                 try {
-                    const connection = yield this.getConnection();
+                    const connection = await this.getConnection();
                     connection.query(`SELECT symbol FROM coinstats WHERE name = '${cryptoName.toUpperCase()}';`, (error, result) => {
                         connection.query(`SELECT * FROM kucoin WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${result[0].symbol}';`, (error, result) => {
                             resolve(result);
@@ -100,12 +91,12 @@ class Repository {
                 catch (err) {
                     console.log(err);
                 }
-            }));
+            });
         };
         this.checkCoinExistSymbol = (coinSymbol, table) => {
-            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+            return new Promise(async (resolve) => {
                 try {
-                    const connection = yield this.getConnection();
+                    const connection = await this.getConnection();
                     connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE symbol = '${coinSymbol.toUpperCase()}'`, (error, results) => {
                         const count = results[0].count;
                         const coinExists = count > 0;
@@ -115,12 +106,12 @@ class Repository {
                 catch (err) {
                     console.log(err);
                 }
-            }));
+            });
         };
         this.checkCoinExistName = (coinName, table) => {
-            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+            return new Promise(async (resolve) => {
                 try {
-                    const connection = yield this.getConnection();
+                    const connection = await this.getConnection();
                     if (table.toLowerCase() === 'kucoin') {
                         connection.query(`SELECT symbol FROM coinstats WHERE name = '${coinName.toUpperCase()}';`, (error, result) => {
                             connection.query(`SELECT COUNT(*) AS count FROM kucoin WHERE symbol = '${result[0].symbol}'`, (error, results) => {
@@ -141,7 +132,7 @@ class Repository {
                 catch (err) {
                     console.log(err);
                 }
-            }));
+            });
         };
     }
 }

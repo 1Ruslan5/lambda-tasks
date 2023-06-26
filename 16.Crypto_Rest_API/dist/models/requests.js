@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 require("express");
@@ -48,17 +39,17 @@ const jsonAwnswear = (status, info) => {
     ]);
     return { status, exeption: exeption.get(status), info };
 };
-const checkValidCoin = (name, symbol, table = 'coinstats') => __awaiter(void 0, void 0, void 0, function* () {
+const checkValidCoin = async (name, symbol, table = 'coinstats') => {
     if (name) {
-        const answear = yield repository.checkCoinExistName(name, table);
+        const answear = await repository.checkCoinExistName(name, table);
         return answear;
     }
     if (symbol) {
-        const answear = yield repository.checkCoinExistSymbol(symbol, table);
+        const answear = await repository.checkCoinExistSymbol(symbol, table);
         return answear;
     }
     return true;
-});
+};
 const checkValidTime = (time) => {
     if (!time.includes('15 minute') || !time.includes("1 hour") || !time.includes("4 hour") || !time.includes("24 hour")) {
         return true;
@@ -80,7 +71,7 @@ const checkTimeToDay = (time) => {
     return time;
 };
 router.use(express_1.default.json());
-router.get('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('*', async (req, res) => {
     const { body: { name, symbol, market, time } } = req;
     const markets = ['koinbase', 'marketcap', 'coinstats', 'coinpaprika', 'kucoin'];
     if ((!name && !symbol) || !time) {
@@ -93,50 +84,50 @@ router.get('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!markets.includes(market)) {
         let suma = 0;
         if (symbol) {
-            if (!(yield checkValidCoin(undefined, symbol))) {
+            if (!await checkValidCoin(undefined, symbol)) {
                 return res.status(404).json(jsonAwnswear(404, "Crypto didn't found"));
             }
             for (const market of markets) {
-                const crypto = yield repository.selectTakeBySymbol(symbol, market, checkTimeToDay(validTime));
+                const crypto = await repository.selectTakeBySymbol(symbol, market, checkTimeToDay(validTime));
                 suma += checkDayPrice(crypto, validTime);
             }
             return res.status(200).json({ 'info': jsonAwnswear(200, 'Data was found'), 'data': { crypto: name, price: suma / 5 } });
         }
         if (name) {
-            if (!(yield checkValidCoin(name))) {
+            if (!await checkValidCoin(name)) {
                 return res.status(404).json(jsonAwnswear(404, "Crypto didn't found"));
             }
             for (let i = 0; i < markets.length - 1; i++) {
-                const crypto = yield repository.selectTakeByName(name, markets[i], checkTimeToDay(validTime));
+                const crypto = await repository.selectTakeByName(name, markets[i], checkTimeToDay(validTime));
                 suma += checkDayPrice(crypto, validTime);
             }
-            const crypto = yield repository.selectKucoinByName(name, checkTimeToDay(validTime));
+            const crypto = await repository.selectKucoinByName(name, checkTimeToDay(validTime));
             suma += checkDayPrice(crypto, validTime);
             return res.status(200).json({ 'info': jsonAwnswear(200, 'Data was found'), 'data': { crypto: name, price: suma / 5 } });
         }
     }
     const validMarket = market.toLowerCase();
     if (symbol) {
-        if (!(yield checkValidCoin(undefined, symbol, validMarket))) {
+        if (!await checkValidCoin(undefined, symbol, validMarket)) {
             return res.status(404).json(jsonAwnswear(404, "Crypto didn't found"));
         }
-        const crypto = yield repository.selectTakeBySymbol(symbol, validMarket, checkTimeToDay(validTime));
+        const crypto = await repository.selectTakeBySymbol(symbol, validMarket, checkTimeToDay(validTime));
         const price = checkDayPrice(crypto, validTime);
         return res.status(200).json({ 'info': jsonAwnswear(200, 'Data was found'), 'data': { crypto: symbol, market, price } });
     }
     if (name) {
-        if (!(yield checkValidCoin(name, undefined, validMarket))) {
+        if (!await checkValidCoin(name, undefined, validMarket)) {
             return res.status(404).json(jsonAwnswear(404, "Crypto didn't found"));
         }
         let crypto;
         if (validMarket === 'kucoin') {
-            crypto = yield repository.selectKucoinByName(name, checkTimeToDay(validTime));
+            crypto = await repository.selectKucoinByName(name, checkTimeToDay(validTime));
         }
         else {
-            crypto = yield repository.selectTakeByName(name, validMarket, checkTimeToDay(validTime));
+            crypto = await repository.selectTakeByName(name, validMarket, checkTimeToDay(validTime));
         }
         const price = checkDayPrice(crypto, validTime);
         return res.status(200).json({ 'info': jsonAwnswear(200, 'Data was found'), 'data': { crypto: name, market, price } });
     }
-}));
+});
 //# sourceMappingURL=requests.js.map
