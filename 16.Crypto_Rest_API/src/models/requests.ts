@@ -59,21 +59,14 @@ router.use(express.json());
 router.get('*', async (req: Request, res: Response) => {
   const { body: { name, symbol, market, time } } = req;
   const markets: string[] = ['koinbase', 'marketcap', 'coinstats', 'coinpaprika', 'kucoin'];
-
   if ((!name && !symbol) || !time) {
     return res.status(404).json(jsonAwnswear(404, "Coin name, symbol or time didn't found"));
   }
-
   const validTime = time.toLowerCase()
   if (!checkValidTime(validTime)) {
     return res.status(400).json(jsonAwnswear(400, "Time didn't valid"));
   }
-
   if (!markets.includes(market)) {
-    return res.status(400).json(jsonAwnswear(400, "Market didn't valid"))
-  }
-
-  if (!market) {
     let suma = 0;
     if (symbol) {
       if (!await checkValidCoin(undefined, symbol)) {
@@ -88,7 +81,6 @@ router.get('*', async (req: Request, res: Response) => {
       return res.status(200).json({ 'info': jsonAwnswear(200, 'Data was found'), 'data': { crypto: name, price: suma / 5 } })
     }
     if (name) {
-
       if (!await checkValidCoin(name)) {
         return res.status(404).json(jsonAwnswear(404, "Crypto didn't found"));
       }
@@ -105,7 +97,6 @@ router.get('*', async (req: Request, res: Response) => {
   }
 
   const validMarket = market.toLowerCase();
-
   if (symbol) {
     if (!await checkValidCoin(undefined, symbol, validMarket)) {
       return res.status(404).json(jsonAwnswear(404, "Crypto didn't found"));

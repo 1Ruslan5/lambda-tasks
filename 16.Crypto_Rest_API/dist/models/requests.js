@@ -91,9 +91,6 @@ router.get('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(400).json(jsonAwnswear(400, "Time didn't valid"));
     }
     if (!markets.includes(market)) {
-        return res.status(400).json(jsonAwnswear(400, "Market didn't valid"));
-    }
-    if (!market) {
         let suma = 0;
         if (symbol) {
             if (!(yield checkValidCoin(undefined, symbol))) {
