@@ -33,6 +33,7 @@ class Repository {
             }
             catch (err) {
                 console.error('Error with insert:', err);
+                this.insert(json, table);
             }
             finally {
                 if (connection) {
@@ -54,7 +55,7 @@ class Repository {
             return new Promise(async (resolve) => {
                 try {
                     const connection = await this.getConnection();
-                    connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND name = '${cryptoName.toUpperCase()}';`, (error, result) => {
+                    connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND name = '${cryptoName.toUpperCase()}' LIMIT 1;`, (error, result) => {
                         resolve(result);
                         connection.release();
                     });
@@ -68,7 +69,7 @@ class Repository {
             return new Promise(async (resolve) => {
                 try {
                     const connection = await this.getConnection();
-                    connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${cryptoSymbol.toUpperCase()}';`, (error, result) => {
+                    connection.query(`SELECT * FROM ${table.toLowerCase()} WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${cryptoSymbol.toUpperCase()}' LIMIT 1;`, (error, result) => {
                         resolve(result);
                         connection.release();
                     });
@@ -82,8 +83,8 @@ class Repository {
             return new Promise(async (resolve) => {
                 try {
                     const connection = await this.getConnection();
-                    connection.query(`SELECT symbol FROM coinstats WHERE name = '${cryptoName.toUpperCase()}';`, (error, result) => {
-                        connection.query(`SELECT * FROM kucoin WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${result[0].symbol}';`, (error, result) => {
+                    connection.query(`SELECT symbol FROM coinstats WHERE name = '${cryptoName.toUpperCase()}' LIMIT 1;`, (error, result) => {
+                        connection.query(`SELECT * FROM kucoin WHERE dateInput <= (NOW() - INTERVAL ${time.toUpperCase()}) AND symbol = '${result[0].symbol}' LIMIT 1;`, (error, result) => {
                             resolve(result);
                         });
                     });
@@ -97,7 +98,7 @@ class Repository {
             return new Promise(async (resolve) => {
                 try {
                     const connection = await this.getConnection();
-                    connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE symbol = '${coinSymbol.toUpperCase()}'`, (error, results) => {
+                    connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE symbol = '${coinSymbol.toUpperCase()}' LIMIT 1`, (error, results) => {
                         const count = results[0].count;
                         const coinExists = count > 0;
                         resolve(coinExists);
@@ -113,8 +114,8 @@ class Repository {
                 try {
                     const connection = await this.getConnection();
                     if (table.toLowerCase() === 'kucoin') {
-                        connection.query(`SELECT symbol FROM coinstats WHERE name = '${coinName.toUpperCase()}';`, (error, result) => {
-                            connection.query(`SELECT COUNT(*) AS count FROM kucoin WHERE symbol = '${result[0].symbol}'`, (error, results) => {
+                        connection.query(`SELECT symbol FROM coinstats WHERE name = '${coinName.toUpperCase()}' LIMIT 1;`, (error, result) => {
+                            connection.query(`SELECT COUNT(*) AS count FROM kucoin WHERE symbol = '${result[0].symbol}' LIMIT 1`, (error, results) => {
                                 const count = results[0].count;
                                 const coinExists = count > 0;
                                 resolve(coinExists);
@@ -122,7 +123,7 @@ class Repository {
                         });
                     }
                     else {
-                        connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE name = '${coinName.toUpperCase()}'`, (error, results) => {
+                        connection.query(`SELECT COUNT(*) AS count FROM ${table.toLowerCase()} WHERE name = '${coinName.toUpperCase()}' LIMIT 1;`, (error, results) => {
                             const count = results[0].count;
                             const coinExists = count > 0;
                             resolve(coinExists);

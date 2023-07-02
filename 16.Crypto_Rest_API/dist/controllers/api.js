@@ -22,7 +22,7 @@ const deleteUSD = (ticker) => {
     return ticker
         .filter((ticker) => ticker.symbol.endsWith('-USDT'))
         .sort((a, b) => b.volValue - a.volValue)
-        .slice(0, 100);
+        .slice(0, 80);
 };
 const marketCap = async () => {
     try {

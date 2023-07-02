@@ -1,18 +1,11 @@
 import express, { Request, Response } from 'express';
 import { Repository } from '../controllers/repository';
+import { jsonAwnswear } from '../views/answer';
 
 const router: express.Router = express.Router();
 const repository: Repository = new Repository();
 
-const jsonAwnswear = (status: number, info: string) => {
-    const exeption = new Map([
-        [400, 'Bad Request'],
-        [201, 'Created'],
-        [200, 'Ok'],
-        [404, 'Not found'],
-    ]);
-    return { status, exeption: exeption.get(status), info }
-}
+
 router.use(express.json());
 
 router.post('/*', async (req: Request, res: Response) => {

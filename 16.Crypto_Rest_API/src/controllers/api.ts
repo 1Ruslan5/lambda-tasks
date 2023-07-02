@@ -30,11 +30,9 @@ const numberFormat = (num: number) => {
     return Number(num.toFixed(7))
 }
 
-const deleteUSD = (ticker: any) => {
+const filterUSD = (ticker: any) => {
     return ticker
-        .filter((ticker: any) => ticker.symbol.endsWith('-USDT'))
-        .sort((a: any, b: any) => b.volValue - a.volValue)
-        .slice(0, 100);
+        .filter((ticker: any) => ticker.symbol.endsWith('-USDT' || ticker.symbol === 'USDT'));
 }
 
 const marketCap = async () => {
@@ -99,8 +97,9 @@ const koinbase = async () => {
 const coinStats = async () => {
     try {
         const { data: { coins } } = await axios.get('https://api.coinstats.app/public/v1/coins?skip=0&limit=60&currency=USD');
+
         const cryptocurrencies = coins.map(({
-            name, symbol, price, priceChange1h, priceChange1d
+            name, symbol, price, priceChange1d
         }: Crypto) => {
             const current_price = parseFloat(price);
             const dayPrice = calculatePercentage(current_price, parseFloat(priceChange1d))
@@ -122,19 +121,22 @@ const coinStats = async () => {
 const kucoin = async () => {
     try {
         const { data: { data: { ticker } } } = await axios.get('https://api.kucoin.com/api/v1/market/allTickers');
+        const coinStatsData = await coinStats();
 
-        const cryptocurrencies = deleteUSD(ticker).map(({
-            symbol, buy, changePrice
-        }: Crypto) => {
-            const price = parseFloat(buy);
-            const dayPrice = price + parseFloat(changePrice);
+        const coinStatsSymbols = coinStatsData.map((coin: any) => coin.symbol);
 
-            return {
-                symbol: symbol.replace('-USDT', '').toUpperCase(),
-                price: numberFormat(price),
-                dayPrice: numberFormat(dayPrice)
-            }
-        })
+        const cryptocurrencies = filterUSD(ticker)
+            .map(({ symbol, buy, changePrice }: Crypto) => {
+                const price = parseFloat(buy);
+                const dayPrice = price + parseFloat(changePrice);
+                return {
+                    symbol: symbol.replace('-USDT', '').toUpperCase(),
+                    price: numberFormat(price),
+                    dayPrice: numberFormat(dayPrice)
+                };
+            })
+            .filter((ticker: any) => coinStatsSymbols.includes(ticker.symbol))
+            .slice(0, 60);
 
         return cryptocurrencies
     } catch (err) {
@@ -147,7 +149,7 @@ const coinPaprika = async () => {
         const { data } = await axios.get('https://api.coinpaprika.com/v1/ticker');
 
         let cryptocurrencies = data.slice(0, 60).map(({
-            name, symbol, price_usd, percent_change_1h, percent_change_24h
+            name, symbol, price_usd, percent_change_24h
         }: Crypto) => {
             const currentPrice = parseFloat(price_usd);
             const dayPrice = calculatePercentage(currentPrice, parseFloat(percent_change_24h));

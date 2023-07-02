@@ -49,7 +49,7 @@ const checkDayPrice = (crypto: Array<Crypto>, time: string) => {
 
 const checkTimeToDay = (time: string) => {
   if (time === '24 hour') {
-    return '0 minute'
+    return '5 minute'
   }
   return time
 }
