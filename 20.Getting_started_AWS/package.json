@@ -1,0 +1,16 @@
+{
+  "name": "start",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "test"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1424.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "serverless-plugin-typescript": "^2.1.5"
+  }
+}

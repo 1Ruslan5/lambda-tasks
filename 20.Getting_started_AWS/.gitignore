@@ -1,0 +1,6 @@
+#Package
+node_modules/
+
+#Serverless
+.serverless
+serverless.yml
