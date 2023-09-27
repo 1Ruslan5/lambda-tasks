@@ -25,6 +25,23 @@
             "username": "b8fd0bd7f626de",
             "password": "9f55b014",
             "database": "heroku_7b3b6acbac4b56e"
+        },
+        {
+            "pgOptions": {
+                "ssl": {
+                    "requestCert": false,
+                    "rejectUnauthorized": false
+                }
+            },
+            "previewLimit": 50,
+            "server": "redistribution.cxibtz0adbkh.eu-central-1.rds.amazonaws.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "redistribution",
+            "connectionTimeout": 10,
+            "database": "history_info",
+            "username": "postgres",
+            "password": "1505200477Srs"
         }
     ]
 }

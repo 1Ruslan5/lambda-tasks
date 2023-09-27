@@ -1,0 +1,13 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+serverless.ts
+
+# esbuild directories
+.esbuild
+.env
+DROP TABLE IF EXISTS history_info;.sql
+redistribution.session.sql

@@ -1,0 +1,27 @@
+[
+    {
+        "name": "adidas",
+        "id": 56347,
+        "frases": ["adidas", "56347"]
+    },
+    {
+        "name": "nike",
+        "id": 78103,
+        "frases": ["nike", "78103"]
+    },
+    {
+        "name": "audi",
+        "id": 96218,
+        "frases": ["audi", "car", "cars", "96218"]
+    },
+    {
+        "name": "apple_store",
+        "id": 58294,
+        "frases": ["apple_store", "apple", "58294"]
+    },
+    {
+        "name": "amazon",
+        "id": 61209,
+        "frases": ["amazon", "61209"]
+    }
+]

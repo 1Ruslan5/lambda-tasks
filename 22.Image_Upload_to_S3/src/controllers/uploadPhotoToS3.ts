@@ -55,7 +55,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             },
         });
 
-
         return jsonResponse(200, JSON.stringify({ message: 'Photo uploaded successfully' }));
     } catch (err) {
         console.log(err);
